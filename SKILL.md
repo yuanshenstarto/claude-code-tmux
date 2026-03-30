@@ -1,5 +1,5 @@
 ---
-name: claude-code-task
+name: code-tmux
 description: Run coding tasks using a persistent tmux session with git worktree isolation. Supports multiple coding agents (Claude Code, Codex, CodeBuddy, OpenCode, etc.). Activate when user asks to build, fix, refactor, or review code. Always uses tmux for persistent multi-turn conversation — never one-shot mode.
 ---
 
