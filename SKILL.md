@@ -25,6 +25,18 @@ tmux new-session -d -s <task-name> -c <worktree-path>
 tmux send-keys -t <task-name> "claude --dangerously-skip-permissions" Enter
 ```
 
+## Plan mode (mandatory)
+
+Always instruct Claude Code to show a plan first before making changes:
+
+```
+Your task prompt here.
+
+Before making any changes, show me a plan of what you intend to do and wait for my approval.
+```
+
+When Claude Code outputs the plan, **relay it to the user** and wait for their confirmation before sending approval.
+
 ## Relaying messages
 
 ```bash
@@ -40,7 +52,10 @@ tmux send-keys -t <task-name> Enter
 tmux capture-pane -t <task-name> -p | tail -10 | grep -E "❯|Yes.*No|proceed|permission|plan|approve"
 ```
 
-Always relay Claude Code's questions/plans to the user before answering.
+Relay flow:
+1. Claude Code outputs a plan → relay to user
+2. User says "ok" / "change X" → forward to Claude Code
+3. Claude Code proceeds → monitor and relay any further questions
 
 ## Parallel tasks
 
@@ -86,6 +101,7 @@ tmux send-keys -t <task-name> "nvm use 20 && claude --dangerously-skip-permissio
 - **Always** use tmux — persistent session, multi-turn conversation
 - **Never** use `--print` mode — that's stateless and loses context
 - **Always** symlink `.env` files — don't copy
-- Relay Claude Code's output to user; ask user before answering plan confirmations
+- **Always** ask Claude Code to show a plan first before touching any files
+- **Always** relay the plan to user and wait for approval before proceeding
 - One status message when starting, one when done or stuck
 - See `references/troubleshooting.md` for common issues
