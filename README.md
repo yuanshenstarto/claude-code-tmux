@@ -1,13 +1,16 @@
 # claude-code-tmux
 
-An [OpenClaw](https://openclaw.ai) skill that runs coding tasks using **Claude Code in a persistent tmux session with git worktree isolation**.
+An [OpenClaw](https://openclaw.ai) skill that runs coding tasks using a **persistent tmux session with git worktree isolation**.
+
+Supports multiple coding agents — Claude Code, Codex, OpenCode, CodeBuddy, or any interactive CLI tool.
 
 ## What it does
 
+- **Asks once, remembers forever** — first run asks which coding agent you prefer, saves it to memory, never asks again
 - Every task gets its own **git worktree** (isolated branch, no file conflicts)
-- Claude Code runs in a **tmux session** — persistent, multi-turn conversation
-- The agent acts as a **relay**: forwards Claude Code's plans/questions to you, sends your answers back
-- Claude Code always shows a **plan first** and waits for your approval before touching files
+- Agent runs in a **tmux session** — persistent, multi-turn conversation
+- **Plan mode by default** — agent always shows a plan and waits for your approval before touching files
+- OpenClaw agent acts as **relay**: forwards plans/questions to you, sends your answers back
 
 ## Install
 
@@ -20,31 +23,33 @@ Or clone directly:
 git clone https://github.com/yuanshenstarto/claude-code-tmux.git
 ```
 
-## Usage
+## Supported agents
 
-Just ask your OpenClaw agent to do a coding task — it will automatically:
-
-1. Create a worktree for the task
-2. Open a tmux session and start Claude Code
-3. Show you the plan before any files are changed
-4. Relay questions and answers between you and Claude Code
-5. Clean up when done
+| Agent | CLI |
+|---|---|
+| [Claude Code](https://github.com/anthropics/claude-code) | `claude` |
+| [Codex](https://github.com/openai/codex) | `codex` |
+| [OpenCode](https://github.com/sst/opencode) | `opencode` |
+| CodeBuddy | `codebuddy` |
+| Any interactive CLI | custom |
 
 ## Workflow
 
 ```
-You → OpenClaw agent → tmux session (Claude Code) → git worktree
-                  ↑________________________________↓
-                      relay: plans, questions, answers
+First run: "Which coding agent? (default: claude)" → saved to memory
+
+You → OpenClaw agent → tmux session (your chosen agent) → git worktree
+                  ↑_____________________________________________↓
+                         relay: plans, questions, answers
 ```
 
-When finished, the branch is preserved so you can switch to it in your main workspace and test.
+When finished, the branch is preserved — switch to it in your main workspace to test.
 
 ## Requirements
 
 - [tmux](https://github.com/tmux/tmux)
-- [Claude Code CLI](https://github.com/anthropics/claude-code) (`npm install -g @anthropic-ai/claude-code`)
-- Node.js >= 20
+- Your preferred coding agent CLI installed
+- Node.js >= 20 (for Claude Code / Codex)
 - git
 
 ## License
